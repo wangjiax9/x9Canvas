@@ -39,7 +39,7 @@
 						var x = 10+Math.floor(Math.random()*(cw-20));
 						var y = 10+Math.floor(Math.random()*(ch-20));
 						var color = "hsl("+parseInt(Math.random()*220)+",70%,70%)";
-						var radius = 2;
+						var radius = 10;
 						var particale = new Particale(x, y, radius, color);
 						particales.push(particale);
 					}
@@ -73,7 +73,7 @@
 					};
 					if(speed1 < vc.s){
 						this.vx -= Math.cos(vc.a) * (vc.s - speed1) * .1;
-						this.vy -= this.vy - Math.sin(vc.a) * (vc.s - speed1) * .1;
+						this.vy -= Math.sin(vc.a) * (vc.s - speed1) * .1;
 					}
 				}
 				this.x += this.vx;
@@ -85,6 +85,7 @@
 						var p0 = particales[i];
 						var p1 = particales[j];
 						var pd = (p1.x - p0.x) * (p1.x - p0.x) + (p1.y - p0.y) * (p1.y - p0.y);
+						var pAngel = Math.atan2(p1.y - p0.y, p1.x - p0.x);
 						if(pd < 5000){
 							ctx.beginPath();
 							ctx.strokeStyle = "#EEEEEE";
@@ -93,7 +94,15 @@
 							ctx.stroke();
 							ctx.closePath();
 						}
-						
+						if(pd < (p0.r + p1.r)*(p0.r + p1.r)){
+							collision = true;
+							p0.vx = -Math.cos(pAngel) * speed2;
+							p0.vy = -Math.sin(pAngel) * speed2;
+							p1.vx = Math.cos(pAngel) * speed2;
+							p1.vy = Math.sin(pAngel) * speed2;
+						}else{
+							collision = false;
+						}
 					}
 				}
 			}
