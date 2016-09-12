@@ -29,17 +29,17 @@
 			var requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
 			var raf;
 			var particales = [];
-			var speed1 = .2;
-			var speed2 = 1.4;
+			var speed1 = 1.5;
+			var speed2 = 2;
 			var collision = false;
 			
 			function buildData() {
-				for (var w = 0; w < 5; w++) {
+				for (var w = 0; w < 10; w++) {
 					for (var h = 0; h < 10; h++) {
 						var x = 10+Math.floor(Math.random()*(cw-20));
 						var y = 10+Math.floor(Math.random()*(ch-20));
 						var color = "hsl("+parseInt(Math.random()*220)+",70%,70%)";
-						var radius = 10;
+						var radius = 2;
 						var particale = new Particale(x, y, radius, color);
 						particales.push(particale);
 					}
@@ -81,18 +81,20 @@
 			}
 			function checkDistance(){
 				for (var i = 0; i < particales.length-1; i++) {
+					var lineNum = 0;
 					for (var j = i+1; j < particales.length; j++) {
 						var p0 = particales[i];
 						var p1 = particales[j];
 						var pd = (p1.x - p0.x) * (p1.x - p0.x) + (p1.y - p0.y) * (p1.y - p0.y);
 						var pAngel = Math.atan2(p1.y - p0.y, p1.x - p0.x);
-						if(pd < 5000){
+						if(pd < 5000 && lineNum < 1){
 							ctx.beginPath();
 							ctx.strokeStyle = "#EEEEEE";
 							ctx.moveTo(p0.x,p0.y);
 							ctx.lineTo(p1.x,p1.y);
 							ctx.stroke();
 							ctx.closePath();
+							lineNum ++;
 						}
 						if(pd < (p0.r + p1.r)*(p0.r + p1.r)){
 							collision = true;
